@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Analysis {
+  id          String   @id @default(cuid())
+  type        String   // 'youtube' | 'telegram'
+  sourceUrl   String
+  sourceId    String
+  title       String
+  description String?
+  transcript  String?
+  metadata    String?  // JSON stored as string
+  insights    String?  // JSON stored as string
+  createdAt   DateTime @default(now())
+  posts       Post[]
+
+  @@index([type])
+  @@index([createdAt])
+}
+
+model Post {
+  id          String    @id @default(cuid())
+  analysisId  String
+  analysis    Analysis  @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  content     String
+  format      String    // 'linkedin' | 'twitter' | 'telegram' | 'instagram'
+  style       String    // 'professional' | 'casual' | 'enthusiastic'
+  hashtags    String    // JSON array stored as string
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([analysisId])
+  @@index([format])
+}
+
+model Settings {
+  id              String   @id @default(cuid())
+  openrouterApiKey String?
+  youtubeApiKey   String?
+  telegramApiId   String?
+  telegramApiHash String?
+  updatedAt       DateTime @updatedAt
+}
