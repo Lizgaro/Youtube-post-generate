@@ -356,4 +356,4 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 
 ---
 
-**Star this repo if you find it useful!**                                        
+**Star ⭐ this repo if you find it useful!**                                        
